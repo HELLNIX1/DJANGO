@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'playground',
+    'base.apps.BaseConfig',
     'debug_toolbar'
 ]
 INTERNAL_IPS = [
