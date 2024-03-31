@@ -18,8 +18,11 @@ class Room(models.Model):
     # auto_now = time is updated again and again
     created = models.DateTimeField(auto_now_add = True)
     # auto_now_add = time is initialised only once
+    class Meta:
+        ordering = ['-updated','-created']
     def __str__(self):
         return str(self.name)
+    
 
 class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
