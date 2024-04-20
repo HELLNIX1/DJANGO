@@ -7,6 +7,7 @@
         {% csrf_token %}
         {% comment %} SECURITY PURPOSES {% endcomment %}
         {{form.as_p}}
+        {% comment %} IN BUILT FORM  {% endcomment %}
         <input type = "submit" value = 'Submit' />
     </form>
 </div>

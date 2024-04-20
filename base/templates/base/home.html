@@ -8,17 +8,30 @@
     }
 </style>
 <div class = "home-container">
+
     <div>
         <h3> BROWSE</h3>
         <hr>
+        <div>
+            <a href = "{% url 'home' %}">ALL</a>
+        </div>
+        {% for topic in topics%}
+        <div>
+            <a href = "{% url 'home' %}?q={{topic.name}}">{{topic.name}} </a>
+        </div>
+        {%endfor%}
     </div>
+
     <div>
+        <h5>{{room_count}} rooms available </h5>
         <a href = {% url 'createroom'%}> Create Room
         <div>
             {% for room in room_list%}
             <div>
+                {% if request.user == room.host %}
                 <a href = "{% url 'updateroom' room.id %}">EDIT </a>
                 <a href = "{% url 'deleteroom' room.id %}">DELETE </a>
+                {% endif %}
                 <span>@{{room.host.username}}</span>
                 <h5>{{room.id}} - <a href = "{% url 'room' room.id%}"> {{room.name}}</a></h5>
                 <small>{{room.topic.name}} </small>
