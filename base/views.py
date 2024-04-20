@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Room,Topic
+from django.contrib.auth.forms import UserCreationForm
 from .forms import RoomForm
 from django.contrib.auth import authenticate,login,logout
 # rooms = [
@@ -14,6 +15,7 @@ from django.contrib.auth import authenticate,login,logout
 # ]
 
 def loginpage(request):
+    page = "login"
     if request.user.is_authenticated:
         return redirect('home')
     if request.method == 'POST':
@@ -32,18 +34,31 @@ def loginpage(request):
             return redirect('home')
         else:
             messages.error(request,"PASSWORD INCORRECT")
-
-
             # STORES THE DATA IN THE BROWSER AND DATABASE (SESSION)
 
-    context = {}
+    context = {'page':page}
     return render(request,'base/login_register.html',context)
+
+
 def logoutuser(request):
     logout(request)
-    return redirect('loginpage')
+    return redirect('home')
+
+def registerpage(request):
+    page = "register"
+    form = UserCreationForm()
+    
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit = False)
+            user.username = user.username.lower()
+            
+
+    return render(request,'base/login_register.html',{'form' : form})
+
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    print(q)
     rooms = Room.objects.filter(
         Q(topic__name__icontains = q) |
         Q(name__icontains = q)        |
@@ -66,7 +81,7 @@ def createRoom(request):
         form = RoomForm(request.POST)
         if form.is_valid():
             form.save()
-            return  redirect('home')
+            return redirect('home')
     context = {'form' : form}
     return render(request, 'base/room_form.html',context)
 
